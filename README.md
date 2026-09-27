@@ -1,62 +1,96 @@
 # 历史文献 OCR
 
-在本机浏览器中打开 PDF，逐页识别正文与注释，校订后复制或导出。适用于历史印刷文献的转写与阅读。
+面向历史印刷文献的本地 OCR 工具。在浏览器中上传 PDF，打开需要的页面，识别正文与注释，对照扫描图像校订后复制或导出。
+
+目前主要围绕法语历史印刷文献开发，随项目提供法语识别模型。
 
 ## 功能
 
-- PDF 按需逐页渲染，直接从扫描图像识别文字。
-- 分别处理正文、标题、页下注释和左右侧注，尽量保留自然段与版面结构。
-- 显示 PDF 页序与可编辑的印刷页码。
-- 支持复制正文、复制注释、暂存校订、重新识别和导出已识别页面。
-- 内置本地字体，适配窄屏阅读。
-- macOS 与 Windows 共用网页界面、PDF 处理及版面分析代码。
+- **按页识别**：打开页面时进行处理，大型 PDF 也可以从需要的页码开始阅读。
+- **从图像识别**：将 PDF 页面渲染为图像，再进行 OCR。
+- **区分正文与注释**：识别标题、正文、页下注释和左右侧注，并分别整理阅读顺序。
+- **保留自然段**：尽量保留原文的段落划分，合并同一自然段中的印刷换行。
+- **对照校订**：同时查看扫描图像、识别文字、PDF 页序和可编辑的印刷页码。
+- **复制与导出**：分别复制正文和注释，也可以导出已识别页面的文本。
 
-## 启动
+## 快速开始
 
-下载完整源码 ZIP 并解压，在项目目录打开终端。项目提供运行所需的 Python、Node.js、识别依赖、法语模型和字体，正常使用无需另外安装依赖或联网下载。
+在仓库页面选择 **Code → Download ZIP**，下载后完整解压。在解压后的项目目录打开终端，运行对应命令：
 
-| 系统 | 启动命令 | 默认识别方式 |
+| 系统 | 启动命令 | 默认 OCR 引擎 |
 | --- | --- | --- |
 | macOS 13 及以上，Apple Silicon 或 Intel | `bash run.sh` | Apple Vision |
-| Windows 10/11 x64 | `.\run.cmd` | Tesseract OCR |
+| Windows 10/11 x64 | `.\run.cmd` | Tesseract |
 
-首次启动会将对应系统的运行文件解压到项目的 `.cache/runtime/`，之后重复使用。在浏览器打开 **http://127.0.0.1:8765/**，上传 PDF 后即可开始识别和阅读。
+项目随附 Python、Node.js、识别依赖、法语模型和界面字体。正常启动和识别无需另外安装依赖或联网下载。请保留解压目录中的 `runtimes/`、`models/` 和 `static/` 等文件夹。
 
-程序运行期间请保留终端窗口。退出时按 **Control+C**；Windows 为 **Ctrl+C**。
+首次启动会在项目内解压运行环境，可能需要等待片刻。终端显示服务地址后，在浏览器打开：
+
+**http://127.0.0.1:8765/**
+
+上传 PDF，打开需要的页面，对照原图检查文字，再点击“复制正文”或“复制注释”。暂存和导出功能可用于整理本次识别结果；导出范围为已经处理的页面。
+
+运行期间请保留终端窗口。使用结束后，在终端按 **Ctrl+C** 退出。关闭浏览器标签页后，程序仍会继续运行。
+
+`setup.sh` 和 `setup.cmd` 用于配置开发环境；日常启动使用 `run.sh` 或 `run.cmd`。
+
+### 常用启动选项
+
+直接打开本地 PDF，并指定初始页面范围：（以下为示例）
+
+```bash
+# macOS
+bash run.sh "/path/to/book.pdf" --first-page 255 --last-page 257
+```
+
+```powershell
+# Windows PowerShell
+.\run.cmd "C:\Documents\book.pdf" --first-page 255 --last-page 257
+```
+
+默认端口被占用时，在启动命令后增加 `--port 8766`，并打开 `http://127.0.0.1:8766/`。
 
 ## 文件与缓存
 
-上传的 PDF、页面图像和识别文字仅保存在本机 `.cache/sessions/` 的当前会话目录中。识别数据按页生成，导出内容只包含已经处理的页面。
+识别在本机进行。上传的 PDF、页面图像和校订文字保存在 `.cache/sessions/` 的当前会话目录中，页面数据按需生成。
 
-正常退出或点击“清理本次缓存”会删除会话内容。强制终止造成的遗留会话会在下次启动时清理；关闭浏览器标签页不会退出终端中的程序。命令行指定的源 PDF 保持原样。
+**退出或清理缓存前，请复制或导出需要保留的文字。** 正常退出程序或点击“清理本次缓存”会删除会话内容。异常退出后的遗留会话会在下次启动时清理。命令行指定的原始 PDF 保持原样。
 
-`.cache/runtime/` 保存解压后的本地运行环境，可在程序退出后删除；下次启动时会重新生成。文献会话清理不会影响共用运行环境。
+`.cache/runtime/` 保存全部文献共用的运行环境，后续启动会重复使用。可以在退出程序后删除此目录，下次启动时程序会从随附文件重新解压。
 
-## OCR 引擎
+## 识别流程与引擎
 
-本项目根据平台使用不同的 OCR 后端：
+每页独立处理：
 
-- **macOS**：默认使用 Apple Vision。
-- **Windows**：默认使用 [Tesseract OCR](https://github.com/tesseract-ocr/tesseract)。
+1. 将 PDF 页面渲染为图像。
+2. 检测文字位置，根据本页的文字大小、栏间空白和注释标记等信息划分区域。
+3. 对各区域分别识别，整理正文与注释的阅读顺序和自然段。
+4. 显示结果，供用户对照扫描图像校订。
 
-Tesseract 是开源 OCR 引擎，提供 `libtesseract` 和 `tesseract` 命令行程序。本项目使用 Tesseract 作为 OCR 后端之一；Tesseract 项目本身采用 **Apache License 2.0**，其版权及许可证归原项目及贡献者所有。第三方组件的具体许可信息见 [THIRD_PARTY.md](THIRD_PARTY.md)。
+macOS 默认通过本项目的 Swift 调用程序使用系统提供的 **Apple Vision**。Windows 使用 **Tesseract.js 7.0.0** 和 **Tesseract.js-core 7.0.0**，在本机通过 Node.js 运行 Tesseract 的 WebAssembly 版本。macOS 也提供 Tesseract 区域识别选项。
 
-如果在论文、报告或其他学术成果中使用本项目，并需要引用其 OCR 技术来源，可同时引用 Tesseract 官方项目提供的相关文献。通用介绍可引用：
-
-> Ray Smith. “An Overview of the Tesseract OCR Engine.” *Proceedings of the Ninth International Conference on Document Analysis and Recognition (ICDAR 2007)*, pp. 629–633, 2007.
-
-Tesseract 官方仓库还提供了其他与版面分析、多语言 OCR 等主题相关的引用条目，详见其 [`CITATIONS.bib`](https://github.com/tesseract-ocr/tesseract/blob/main/CITATIONS.bib)。
+页面区域划分与阅读顺序由本项目代码处理，参考了 PaddleOCR / PaddleX 和 Tesseract 的相关处理思路。具体来源、参考范围和组件许可见 [THIRD_PARTY.md](THIRD_PARTY.md)。
 
 ## 适用范围
 
-本项目面向历史印刷文献。版面判断采用文字位置、文字高度、栏间空白和注释标记等规则，复杂版式、低质量扫描和手写批注仍需人工核对。
+当前主要使用法语历史印刷文献验证。复杂版式、低质量扫描、手写批注，以及数字与形近字母的混淆，仍可能造成错误。正文和注释的分类也需要对照原页检查。
 
-Tesseract 与 Apple Vision 的检测和识别方式不同，同一页面在不同平台上可能得到不同的区域划分和文字结果。目前尚未建立完整的人工转写评估集，因此不提供统一的字符准确率声明。
+原始拼写、日期数字、印刷页码和侧注对应关系应以扫描原页为准。同一页面在 Apple Vision 与 Tesseract 下可能得到不同结果。项目尚未建立完整的人工转写评估集，因此不提供统一的字符准确率声明。
 
-原始拼写、日期数字以及侧注与正文的对应关系应以扫描原页为准并进行人工校订。
+## 学术引用
 
-## 许可证
+在论文或报告中使用识别结果时，建议记录项目版本、实际使用的 OCR 引擎和人工校订方式。介绍 Tesseract 的技术来源时，可引用：
 
-项目代码采用 [Apache License 2.0](LICENSE)。
+> Ray Smith. “An Overview of the Tesseract OCR Engine.” *Proceedings of the Ninth International Conference on Document Analysis and Recognition (ICDAR 2007)*, pp. 629–633, 2007.
 
-Tesseract OCR、字体、模型及其他第三方依赖保留各自的版权和许可证；详情见 [THIRD_PARTY.md](THIRD_PARTY.md)。
+其他相关文献见 Tesseract 官方仓库的 [`CITATIONS.bib`](https://github.com/tesseract-ocr/tesseract/blob/main/CITATIONS.bib)。
+
+## 许可证与第三方组件
+
+本项目代码采用 [Apache License 2.0](LICENSE)，版权声明见 [NOTICE](NOTICE)。
+
+Tesseract.js、Tesseract.js-core、识别模型、字体及随附运行环境中的第三方组件分别适用其各自许可证。
+
+Apple Vision 由 macOS 提供，适用 Apple 的相关条款。组件来源与许可说明见 [THIRD_PARTY.md](THIRD_PARTY.md)。
+
+再分发项目时，请一并保留项目与第三方组件的许可证、版权声明及适用的 NOTICE 文件。
