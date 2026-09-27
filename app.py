@@ -515,8 +515,8 @@ def page_html(workspace: Workspace, number: int, prefix: str = "") -> str:
         + f'>{name}</option>' for engine, name in
         ([('vision', 'Apple Vision')] if sys.platform == 'darwin' else []) + ([('tesseract', 'Tesseract（法语）')] if tesseract_available() else []))
     return f"""<!doctype html><html lang="zh"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PDF {number} · 历史文献 OCR</title><link rel="stylesheet" href="/static/app.css">
-<header class="topbar"><a class="brand" href="/library"><span class="brand-mark" aria-hidden="true">❧</span>历史文献 OCR</a><nav><a href="/library">文献库</a><a href="{prefix}/page/{previous}">← 上一页</a><a href="{prefix}/page/{following}">下一页 →</a><details class="export-menu"><summary>导出 ↗</summary><div class="export-links"><a href="{prefix}/export.txt">已识别文本</a><a href="{prefix}/export.html">带页码的文本</a></div></details></nav></header>
+<title>PDF {number} · Scriptorium</title><link rel="stylesheet" href="/static/app.css">
+<header class="topbar"><a class="brand" href="/library"><span class="brand-mark" aria-hidden="true">❧</span>Scriptorium</a><nav><a href="/library">文献库</a><a href="{prefix}/page/{previous}">← 上一页</a><a href="{prefix}/page/{following}">下一页 →</a><details class="export-menu"><summary>导出 ↗</summary><div class="export-links"><a href="{prefix}/export.txt">已识别文本</a><a href="{prefix}/export.html">带页码的文本</a></div></details></nav></header>
 <div class="workspace-heading"><p class="document-name" title="{title}">{title}</p><span class="page-badge">PDF {number} / {workspace.total_pages}</span></div>
 <main class="workspace"><section class="panel scan-panel"><div class="panel-heading"><h2>扫描原页</h2><span class="eyebrow">Original</span></div><div class="scan-surface"><img src="{prefix}/image/{number}" alt="PDF 第 {number} 页扫描图像"></div></section>
 <section class="panel editor-panel"><div class="panel-heading"><h2>文字校订</h2><span class="eyebrow">Transcription</span></div>{recognition_message}<form id="editor" method="post" action="{prefix}/save/{number}">
@@ -577,9 +577,9 @@ def make_handler(workspace: Workspace | None = None) -> type[BaseHTTPRequestHand
             if initial:
                 items.insert(0, f'<li><a href="/page/{initial.first_page}">{html.escape(initial.pdf.name)}</a> · 当前文献</li>')
             template = '''<!doctype html><html lang="zh"><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1"><title>上传 PDF · 历史文献 OCR</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>文献库 · Scriptorium</title>
 <link rel="stylesheet" href="/static/app.css">
-<header class="topbar"><a class="brand" href="/library"><span class="brand-mark" aria-hidden="true">❧</span>历史文献 OCR</a><span class="eyebrow">A space for reading</span></header>
+<header class="topbar"><a class="brand" href="/library"><span class="brand-mark" aria-hidden="true">❧</span>Scriptorium</a><span class="eyebrow">A space for reading</span></header>
 <main class="library"><div class="welcome"><span class="eyebrow">Read · Transcribe · Discover</span><h1>让文献，重新可读。</h1><p>从一页原文开始，识别、校订，摘录所需。</p></div>
 <section class="upload-card"><h2>打开一份文献</h2><p>选择本地 PDF，开始逐页识别。</p>
 <form id="upload"><label class="upload-zone"><span>上传本地 PDF</span><input id="file" type="file" accept="application/pdf,.pdf" required aria-label="选择 PDF"></label>
