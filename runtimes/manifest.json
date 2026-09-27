@@ -1,0 +1,26 @@
+{
+  "python": "3.12.14",
+  "node": "v22.23.3",
+  "archives": {
+    "macos-arm64": {
+      "file": "macos-arm64.tar.gz",
+      "sha256": "03cfc6150141369ad246d804466a46cda33426343c321f8053b495ab0a967958",
+      "bytes": 69919065
+    },
+    "macos-x64": {
+      "file": "macos-x64.tar.gz",
+      "sha256": "8c9f19c4ecadbbe7ad3d56fcc963afb788070516f8b57de43427fdef2764ea7e",
+      "bytes": 71675118
+    },
+    "windows-x64": {
+      "file": "windows-x64.zip",
+      "sha256": "03ff58424789ba9f23084b822358bcde73b3534a967611f3091a45b99ae5d7f4",
+      "bytes": 63335282
+    },
+    "shared": {
+      "file": "shared.zip",
+      "sha256": "93497dc904a64db23ee2f772a175a105ced02d77d898b0e124ebc7c10e3948ca",
+      "bytes": 18953358
+    }
+  }
+}

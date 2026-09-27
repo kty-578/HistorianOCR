@@ -1,0 +1,9 @@
+{
+  "name": "historical-document-ocr",
+  "version": "0.1.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "description": "Local historical document OCR",
+  "engines": { "node": ">=20" },
+  "dependencies": { "tesseract.js": "7.0.0" }
+}

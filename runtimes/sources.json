@@ -1,0 +1,29 @@
+{
+  "python_version": "3.12.14",
+  "node_version": "v22.23.3",
+  "packages": [
+    "pillow==12.3.0",
+    "pypdfium2==5.13.0",
+    "portalocker==4.4.0"
+  ],
+  "platforms": {
+    "macos-arm64": {
+      "python_url": "https://github.com/astral-sh/python-build-standalone/releases/download/20260924/cpython-3.12.14%2B20260924-aarch64-apple-darwin-install_only_stripped.tar.gz",
+      "python_sha256": "c2edb321cd32ec2b170df208db0446dccc4398db602ca27cf2079098fb1f7d9d",
+      "node_url": "https://nodejs.org/dist/v22.23.3/node-v22.23.3-darwin-arm64.tar.gz",
+      "node_sha256": "23b25245dcfb9af7262f8ff142e9e2e0af025368117329e7a7458a51e5922f53"
+    },
+    "macos-x64": {
+      "python_url": "https://github.com/astral-sh/python-build-standalone/releases/download/20260924/cpython-3.12.14%2B20260924-x86_64-apple-darwin-install_only_stripped.tar.gz",
+      "python_sha256": "7ea9761b9069c10b9a20531d568645849d604c59e9c7f11f6659f1e1790c968e",
+      "node_url": "https://nodejs.org/dist/v22.23.3/node-v22.23.3-darwin-x64.tar.gz",
+      "node_sha256": "8a677b0219178efd6eb0e475457c4afb452b521a92f6e67845a73bd85727f2a8"
+    },
+    "windows-x64": {
+      "python_url": "https://github.com/astral-sh/python-build-standalone/releases/download/20260924/cpython-3.12.14%2B20260924-x86_64-pc-windows-msvc-install_only_stripped.tar.gz",
+      "python_sha256": "c5bf8edfe858c1df9891be498b5bbc8761d383df5b9790658b088fea4870433a",
+      "node_url": "https://nodejs.org/dist/v22.23.3/node-v22.23.3-win-x64.zip",
+      "node_sha256": "2b0ff57b049cda1bbcea2240eec20467018713c1efe1f7360c2681859b90ed71"
+    }
+  }
+}

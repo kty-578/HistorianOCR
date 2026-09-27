@@ -1,0 +1,16 @@
+data/
+.cache/
+.venv/
+__pycache__/
+*.pyc
+node_modules/
+.DS_Store
+Thumbs.db
+desktop.ini
+.env
+.env.*
+!.env.example
+*.log
+*.pdf
+*.sqlite3
+*.sqlite3-*

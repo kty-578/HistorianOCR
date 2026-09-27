@@ -1,0 +1,22 @@
+name: Runtime checks
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  runtime:
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check bundled macOS runtime
+        if: runner.os == 'macOS'
+        run: |
+          bash run.sh --check-runtime
+          bash run.sh --help
+      - name: Check bundled Windows runtime
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          call run.cmd --check-runtime
+          if errorlevel 1 exit /b 1
+          call run.cmd --help
