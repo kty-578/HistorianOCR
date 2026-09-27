@@ -39,6 +39,14 @@ def unpack(archive, target):
             source.extractall(target, filter='data')
 
 
+def public_tar_info(info):
+    info.uid = 0
+    info.gid = 0
+    info.uname = ''
+    info.gname = ''
+    return info
+
+
 def build():
     if sys.platform != 'darwin':
         raise SystemExit('Building the Apple Vision executables requires macOS and Swift.')
@@ -100,7 +108,7 @@ def build():
         else:
             with tarfile.open(output, 'w:gz', compresslevel=6) as archive:
                 for path in sorted(target.iterdir()):
-                    archive.add(path, arcname=path.name)
+                    archive.add(path, arcname=path.name, filter=public_tar_info)
         if output.stat().st_size >= 100*1024*1024:
             raise ValueError(f'Archive exceeds GitHub file size limit: {output}')
         output.with_name(output.name+'.sha256').write_text(digest(output)+'  '+output.name+'\n')
