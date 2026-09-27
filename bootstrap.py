@@ -38,7 +38,10 @@ def main():
     subprocess.run([node, str(npm_cli), 'ci', '--ignore-scripts', '--no-audit', '--no-fund'],
                    check=True, cwd=ROOT, env=environment)
     subprocess.run([str(python), str(ROOT / 'setup_tesseract.py')], check=True, cwd=ROOT, env=environment)
-    print('Ready. Start with run.cmd on Windows or bash run.sh on macOS.')
+    if os.name == 'nt':
+        print(r'Ready. Start the development app with .venv\Scripts\python.exe app.py.')
+    else:
+        print('Ready. Start the development app with .venv/bin/python app.py.')
 
 
 if __name__ == '__main__':

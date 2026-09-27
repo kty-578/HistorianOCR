@@ -1,8 +1,10 @@
-# 历史文献 OCR
+# Scriptorium
 
-面向历史印刷文献的本地 OCR 工具。在浏览器中上传 PDF，打开需要的页面，识别正文与注释，对照扫描图像校订后复制或导出。
+`Scriptorium` 一词源自中世纪拉丁语，意为缮写室，也常指修道院抄写书籍的场所。
 
-目前主要围绕法语历史印刷文献开发，随项目提供法语识别模型。
+本项目致力于制作面向历史文献的本地 OCR 工具，重点处理非标准印刷文献。在浏览器中上传 PDF，打开需要的页面，识别正文与注释，对照扫描图像校订后复制或导出。
+
+目前主要涉及法语历史印刷文献。未来可继续扩展至拉丁语、英语、德语等拉丁字母文献，以及哥特体、加洛林小写体等手稿书体。语言识别与手稿书体识别属于不同的工作方向，当前识别范围见“适用范围”。
 
 ## 功能
 
@@ -22,6 +24,8 @@
 | macOS 13 及以上，Apple Silicon 或 Intel | `bash run.sh` | Apple Vision |
 | Windows 10/11 x64 | `.\run.cmd` | Tesseract |
 
+当前提供 macOS 和 Windows 运行环境，Linux 运行环境尚未提供。
+
 项目随附 Python、Node.js、识别依赖、法语模型和界面字体。正常启动和识别无需另外安装依赖或联网下载。请保留解压目录中的 `runtimes/`、`models/` 和 `static/` 等文件夹。
 
 首次启动会在项目内解压运行环境，可能需要等待片刻。终端显示服务地址后，在浏览器打开：
@@ -32,7 +36,23 @@
 
 运行期间请保留终端窗口。使用结束后，在终端按 **Ctrl+C** 退出。关闭浏览器标签页后，程序仍会继续运行。
 
-`setup.sh` 和 `setup.cmd` 用于配置开发环境；日常启动使用 `run.sh` 或 `run.cmd`。
+### 开发环境
+
+`setup.sh` 和 `setup.cmd` 会建立项目内的 `.venv/`，并安装 Python 与 Node.js 依赖，需要联网。开发环境需要 Python 3.10 或更新版本，以及 Node.js 20 或更新版本。macOS 若要使用 Apple Vision，还需要安装 Xcode Command Line Tools。
+
+配置完成后，使用项目内的 Python 直接启动开发版本：
+
+```bash
+# macOS
+.venv/bin/python app.py
+```
+
+```powershell
+# Windows PowerShell
+.\.venv\Scripts\python.exe app.py
+```
+
+日常使用便携运行环境时，使用 `run.sh` 或 `run.cmd`。
 
 ### 常用启动选项
 
@@ -79,7 +99,9 @@ macOS 默认通过本项目的 Swift 调用程序使用系统提供的 **Apple V
 
 ## 学术引用
 
-在论文或报告中使用识别结果时，建议记录项目版本、实际使用的 OCR 引擎和人工校订方式。介绍 Tesseract 的技术来源时，可引用：
+引用 Scriptorium 时，请使用 GitHub 仓库中的 **Cite this repository**，或参考项目根目录 `CITATION.cff` 提供的引用信息。该文件单独保存软件引用资料，GitHub 可据此生成 APA 和 BibTeX 格式。
+
+在论文或报告中使用识别结果时，建议记录项目版本、实际使用的 OCR 引擎和人工校订方式。介绍 Tesseract 的技术来源时，可另行引用：
 
 > Ray Smith. “An Overview of the Tesseract OCR Engine.” *Proceedings of the Ninth International Conference on Document Analysis and Recognition (ICDAR 2007)*, pp. 629–633, 2007.
 
